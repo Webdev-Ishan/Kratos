@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import connect from './DB/db.js';
 import UserRoute from './Routes/userRoutes.js';
+import ProjectRoute from './Routes/projectRoutes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 connect();
@@ -18,6 +19,8 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
+
+app.use('/projects', ProjectRoute);
 app.use('/users', UserRoute);
 
 export default app;

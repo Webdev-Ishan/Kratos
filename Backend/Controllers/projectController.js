@@ -1,4 +1,3 @@
-import ProjectModel from "../Models/Projectmodel.js";
 import * as projectService from '../Service/projectService.js';
 import userModel from "../Models/Usermodel.js";
 import { validationResult } from 'express-validator';
