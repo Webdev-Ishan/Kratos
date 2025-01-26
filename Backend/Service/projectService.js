@@ -7,7 +7,7 @@ if(!name || !userId){
     throw new Error('Name of project and UserId are required');
 
 }
-
+ 
 let project;
 try {
    

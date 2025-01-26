@@ -14,6 +14,8 @@ projectController.createProjectController
 );
    
 
+router.get('/getprojects',auth.authuser,projectController.getProjectsController);
+
 
 
 export default router;

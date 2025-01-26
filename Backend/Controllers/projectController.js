@@ -31,3 +31,12 @@ try {
 
 
 }
+
+
+
+
+export const getProjectsController = async (req, res) => {
+
+
+    
+}
