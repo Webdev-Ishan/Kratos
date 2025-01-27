@@ -60,21 +60,27 @@ export const addUsersToProject = async ({ projectId, users, userId }) => {
   const project = await ProjectModel.findOne({
     _id: projectId,
     users: userId
-  });
+})
 
-  console.log('project:', project);
+console.log(project)
 
-  if (!project) {
-    const projectOwner = await ProjectModel.findOneAndUpdate(
-      { _id: projectId },
-      { $addToSet: { users: userId } },
-      { new: true }
-    );
-  
-    if (!projectOwner) {
-      throw new Error('Invalid project or permission denied.');
+if (!project) {
+    throw new Error("User not belong to this project")
+}
+
+const updatedProject = await ProjectModel.findOneAndUpdate({
+    _id: projectId
+}, {
+    $addToSet: {
+        users: {
+            $each: users
+        }
     }
-  }
+}, {
+    new: true
+})
 
-  return Project;
+return updatedProject
+
+
 };
