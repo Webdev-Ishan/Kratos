@@ -1,4 +1,3 @@
-import Project from "../Models/Projectmodel.js";
 import ProjectModel from "../Models/Projectmodel.js";
 import mongoose from 'mongoose';
 
@@ -84,3 +83,4 @@ return updatedProject
 
 
 };
+

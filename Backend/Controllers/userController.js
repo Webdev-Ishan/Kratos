@@ -93,3 +93,21 @@ res.status(200).json({message:'Logged out successfully'});
         res.status(400).send({error:error.message});
     }
 }
+
+
+export const getallusersController = async (req, res) => {
+
+
+const loggedin = await userModel.findOne({email:req.user.email});
+
+    try {
+        
+const allusers = await userService.getAllusers({userId:loggedin._id});
+
+return res.status(200).json({users:allusers});
+
+    } catch (error) {
+        
+res.status(400).json({error:error.message});
+    }
+}
