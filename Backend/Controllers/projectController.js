@@ -40,7 +40,7 @@ try {
     
     const loggeduser = await userModel.findOne({email:req.user.email});
 
-    const allprojects= await projectService.getAllprojects(loggeduser._id);
+    const allprojects= await projectService.getAllProjectByUserId({userId:loggeduser._id});
 
 
     return res.status(200).json({projects:allprojects});

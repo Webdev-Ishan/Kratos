@@ -82,22 +82,41 @@ const updatedProject = await ProjectModel.findOneAndUpdate({
 return updatedProject
 
 
+
 };
+
+
+
+
+
+export const getAllProjectByUserId = async ({ userId }) => {
+  if (!userId) {
+      throw new Error('UserId is required')
+  }
+
+  const allUserProjects = await ProjectModel.find({
+      users: userId
+  })
+
+  return allUserProjects
+}
+
+
 
 
 export const getAllproject = async ({projectId}) => {
 
-  if (!projectId) {
-      throw new Error('projectId is required');
-  }
+    if (!projectId) {
+        throw new Error('projectId is required');
+    }
 
-  if (!mongoose.Types.ObjectId.isValid(projectId)) {
-      throw new Error('Invalid projectId');
-  }
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+        throw new Error('Invalid projectId');
+    }
 
-  const project = await ProjectModel.findOne({_id:projectId}).populate('users');
-  
-  
+    const project = await ProjectModel.findOne({_id:projectId}).populate('users');
+    
+    
 return project;
 
 }
