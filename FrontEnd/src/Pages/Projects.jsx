@@ -10,10 +10,19 @@ const [selectedUserId, setSelectedUserId] = useState(null);
 
 
 const [users, setUsers] = useState([
+
   { id: '1', name: 'User One' },
   { id: '2', name: 'User Two' },
   { id: '3', name: 'User Three' },
-  
+  {  id:'4', name: 'User Four' },
+  {  id:'5', name: 'User Five' },
+  {  id:'6', name: 'User Six' },
+  { id: '1', name: 'User One' },
+  { id: '2', name: 'User Two' },
+  { id: '3', name: 'User Three' },
+  {  id:'4', name: 'User Four' },
+  {  id:'5', name: 'User Five' },
+  {  id:'6', name: 'User Six' },
 ]);  
 
 
@@ -58,7 +67,7 @@ const [users, setUsers] = useState([
 
 
         <button className='cursor-pointer p-2' onClick={() => setIsModalOpen(true)}>
-            <i className="ri-user-add-fill text-white text-lg"></i>
+            <i className="ri-user-add-fill text-black text-lg"></i>
             <span className='font-normal ml-1 text-sm text-white'>Add User</span>
           </button>
 
@@ -96,14 +105,14 @@ const [users, setUsers] = useState([
 
 
       {isModalOpen && (
-        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-          <div className='bg-slate-800 p-6 rounded-lg shadow-lg w-full max-w-md'>
+        <div className='fixed inset-0  flex items-center justify-center bg-black bg-opacity-50'>
+          <div className='bg-slate-800  p-6 rounded-lg shadow-lg w-full max-w-md '>
             <h2 className='text-2xl font-normal mb-4 text-blue-600'>Select User</h2>
-            <div className='users-list'>
+            <div className='users-list max-h-60 overflow-y-auto'>
               {users.map((user) => (
                 <div
                   key={user.id}
-                  className='user-tile bg-white text-black p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600   cursor-pointer  duration-300'
+                  className='user-tile bg-white text-black p-2 rounded mb-2 mr-4 border-2 border-transparent hover:border-blue-600   cursor-pointer  duration-300'
                   onClick={() => handleUserClick(user.id)}
                 >
                   <i className="ri-user-6-fill text-black text-xl"></i>
@@ -117,6 +126,14 @@ const [users, setUsers] = useState([
             >
               Cancel
             </button>
+
+            <button
+              className='m-4 p-2 bg-blue-600 border-1 rounded-lg border-transparent hover:border-white text-white  duration-300'
+              onClick={() => setIsModalOpen(false)}
+            >
+              Add user
+            </button>
+
           </div>
         </div>
       )}
