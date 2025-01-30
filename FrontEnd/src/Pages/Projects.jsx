@@ -1,36 +1,75 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
-
+import axios from '../Config/axios'
 const Projects = () => {
   const location = useLocation();
 
 const [ispanelopen, setispanelopen] = useState(false)
 const [isModalOpen, setIsModalOpen] = useState(false);
-const [selectedUserId, setSelectedUserId] = useState(null);
+const [selectedUserId, setSelectedUserId] = useState([]);
 
 
-const [users, setUsers] = useState([
-
-  { id: '1', name: 'User One' },
-  { id: '2', name: 'User Two' },
-  { id: '3', name: 'User Three' },
-  {  id:'4', name: 'User Four' },
-  {  id:'5', name: 'User Five' },
-  {  id:'6', name: 'User Six' },
-  { id: '1', name: 'User One' },
-  { id: '2', name: 'User Two' },
-  { id: '3', name: 'User Three' },
-  {  id:'4', name: 'User Four' },
-  {  id:'5', name: 'User Five' },
-  {  id:'6', name: 'User Six' },
-]);  
+const [users, setusers] = useState([])
 
 
+useEffect(()=>{
+
+axios.get('/users/getallusers')
+.then(res=>{
+
+  setusers(res.data.users)
+})
+.catch(err=>{
+
+  console.log(err)
+})
+
+
+},[])
+
+
+
+const adduser = ()=>{
+
+  
+  axios.put('/projects/add-user',{
+    projectId: location.state.project._id,
+    users:Array.from(selectedUserId)
+  }).then(res =>{
+
+
+    setIsModalOpen(false);
+    console.log(res)
+  })
+  .catch(err =>{
+    console.log(err)
+  })
+}
 
   const handleUserClick = (userId) => {
-    setSelectedUserId(userId);
-    setIsModalOpen(false); // Close the modal after selecting a user
+   
+
+
+    setSelectedUserId(prevSelectedId => {
+
+const newSelectedid = new Set(prevSelectedId);
+if(newSelectedid.has(userId)){
+
+  newSelectedid.delete(userId)
+} else{
+
+newSelectedid.add(userId);
+
+}
+//console.log(Array.from(newSelectedid))
+
+return newSelectedid;
+
+    })
+    
   };
+
+
 
   return (
     <main className='h-screen bg-black w-screen flex border-2 border-white'>
@@ -111,9 +150,9 @@ const [users, setUsers] = useState([
             <div className='users-list max-h-60 overflow-y-auto'>
               {users.map((user) => (
                 <div
-                  key={user.id}
+                  key={user._id}
                   className='user-tile bg-white text-black p-2 rounded mb-2 mr-4 border-2 border-transparent hover:border-blue-600   cursor-pointer  duration-300'
-                  onClick={() => handleUserClick(user.id)}
+                  onClick={() => handleUserClick(user._id)}
                 >
                   <i className="ri-user-6-fill text-black text-xl"></i>
                   <span className='font-normal ml-4 text-md'>{user.name}</span>
@@ -129,7 +168,8 @@ const [users, setUsers] = useState([
 
             <button
               className='m-4 p-2 bg-blue-600 border-1 rounded-lg border-transparent hover:border-white text-white  duration-300'
-              onClick={() => setIsModalOpen(false)}
+              onClick={adduser}
+              
             >
               Add user
             </button>
