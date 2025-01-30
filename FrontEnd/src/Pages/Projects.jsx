@@ -7,12 +7,27 @@ const Projects = () => {
 const [ispanelopen, setispanelopen] = useState(false)
 const [isModalOpen, setIsModalOpen] = useState(false);
 const [selectedUserId, setSelectedUserId] = useState([]);
+const [ project, setProject ] = useState(location.state.project)
 
 
 const [users, setusers] = useState([])
 
 
 useEffect(()=>{
+
+
+
+  axios.get(`/projects/getproject/${location.state.project._id}`)
+  .then(res=>{
+  console.log(res.data.project)
+    setProject(res.data.project);
+    
+  })
+  .catch(err =>{
+  console.log(err);
+  
+  })
+
 
 axios.get('/users/getallusers')
 .then(res=>{
@@ -32,6 +47,7 @@ axios.get('/users/getallusers')
 const adduser = ()=>{
 
   
+
   axios.put('/projects/add-user',{
     projectId: location.state.project._id,
     users:Array.from(selectedUserId)
@@ -85,12 +101,21 @@ return newSelectedid;
 
 <div className='users flex flex-col gap-2'>
 
-<div className='user flex items-center gap-2 p-2  duration-300 cursor-pointer'> 
+{Array.isArray(project.users) && project.users.map(user =>{
 
-  <div className='bg-white text-black p-2 rounded mb-2 w-full hover:bg-slate-300 duration-300 '>
-  <i className="ri-user-6-fill text-black text-xl"></i><span className='font-normal ml-4 text-md'> Username</span>
+
+return (
+
+  <div key={user._id} className='user flex items-center gap-2 p-2  duration-300 cursor-pointer'> 
+
+    <div className='bg-white text-black p-2 rounded mb-2 w-full hover:bg-slate-300 duration-300 '>
+    <i className="ri-user-6-fill text-black text-xl"></i> <span className='font-normal ml-4 text-md'> {user.email} </span>
+    </div>
   </div>
-</div>
+
+)
+
+})}
 
 
 
