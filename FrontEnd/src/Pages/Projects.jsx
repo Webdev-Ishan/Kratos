@@ -19,7 +19,7 @@ useEffect(()=>{
 
   axios.get(`/projects/getproject/${location.state.project._id}`)
   .then(res=>{
-  console.log(res.data.project)
+  //console.log(res.data.project)
     setProject(res.data.project);
     
   })
