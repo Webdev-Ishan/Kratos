@@ -1,6 +1,10 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect, useContext} from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from '../Config/axios'
+import { initializeSocket , recievemessage , sendmessage } from '../Config/socket.js';
+import {UserContext} from '../Context/user.context.jsx'
+
+
 const Projects = () => {
   const location = useLocation();
 
@@ -8,13 +12,35 @@ const [ispanelopen, setispanelopen] = useState(false)
 const [isModalOpen, setIsModalOpen] = useState(false);
 const [selectedUserId, setSelectedUserId] = useState([]);
 const [ project, setProject ] = useState(location.state.project)
-
+const [message , setmessage] = useState('')
 
 const [users, setusers] = useState([])
-
-
+const {user} = useContext(UserContext);
+ 
 useEffect(()=>{
 
+   const newSocket = initializeSocket(project._id);
+
+
+  const recievedmessage = recievemessage('project-message' , data =>{
+
+    console.log(data);
+  })
+
+
+  if (newSocket) {
+    newSocket.on("connect", () => {
+      console.log("Connected to WebSocket:", newSocket.id);
+    });
+
+    newSocket.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error.message);
+    });
+
+    newSocket.on("disconnect", () => {
+      console.log("Disconnected from WebSocket");
+    });
+  }
 
 
   axios.get(`/projects/getproject/${location.state.project._id}`)
@@ -62,6 +88,10 @@ const adduser = ()=>{
   })
 }
 
+
+
+
+
   const handleUserClick = (userId) => {
    
 
@@ -79,13 +109,26 @@ newSelectedid.add(userId);
 }
 //console.log(Array.from(newSelectedid))
 
+
 return newSelectedid;
 
     })
     
   };
 
+  function send(){
 
+    sendmessage('project-message',{
+    message,
+    sender: user
+    
+    } 
+  
+  )
+    
+    //console.log(message)
+    setmessage("")
+    }
 
   return (
     <main className='h-screen bg-black w-screen flex border-2 border-white'>
@@ -158,9 +201,13 @@ return (
             <input
               className='flex-grow px-4   bg-white border-t-1 border-black  focus:outline-none'
               type="text"
+              value={message}
+              onChange={(e)=>{ setmessage(e.target.value)}}
               placeholder='Enter the message'
             />
-            <button className='p-2 px-3  bg-slate-900  text-white  cursor-pointer'>
+            <button
+            onClick={send}
+            className='p-2 px-3  bg-slate-900  text-white  cursor-pointer'>
               <i className="ri-send-plane-2-fill hover:text-blue-600 duration-300"></i>
             </button>
           </div>

@@ -3,60 +3,66 @@ import app from './app.js';
 import http from 'http';
 import {Server} from 'socket.io'
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import Projectmodel from './Models/Projectmodel.js';
+
 
 const server= http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
+;
+
+io.use( async (socket, next) => {
+   // console.log("Received Auth:", socket.handshake.auth); // Debugging
+
+    const token = socket.handshake.auth?.token;
+   // console.log("Extracted Token:", token); // Debugging
+
+   const projectId = socket.handshake.query.projectId;
+
+   if(!mongoose.Types.ObjectId.isValid(projectId)){
+    return next(new Error('Invalid ProjectId'))
+   }
 
 
+   socket.project = await Projectmodel.findById(projectId);
 
-io.use((socket,next)=>{
-
-try {
-
-    const authHeader = socket.handshake.headers.authorization;
-    const token = authHeader?.split(" ")[1];
-    
-    //console.log("Extracted Token:", token);
-    
     if (!token) {
         return next(new Error("Authentication error: No token provided"));
     }
-    
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        socket.user = decoded;
+        next();
+    } catch (error) {
+        next(new Error("Authentication error: " + error.message));
+    }
+});
 
 
-const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-if(!decoded){
-    return next(new Error('Authentication error'))
-}
 
 
-socket.user = decoded
 
-next()
-    
-} catch (error) {
-    next(error)
-}
 
+io.on('connection', socket => {
+
+console.log('a user connected');
+socket.join(socket.project._id);
+
+socket.on('project-message' , data=>{
+socket.broadcast.to(socket.project_id).emit('project-message');
 
 })
 
 
-
-
-
-
-
-
-
-
-io.on('connection', client => {
-
-console.log('a user connected');
-
-  client.on('event', data => { /* … */ });
-  client.on('disconnect', () => { /* … */ });
+  socket.on('event', data => { /* … */ });
+  socket.on('disconnect', () => { /* … */ });
 });
 
 
