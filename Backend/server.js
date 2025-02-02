@@ -56,6 +56,7 @@ console.log('a user connected');
 socket.join(socket.project._id);
 
 socket.on('project-message' , data=>{
+    console.log(data);
 socket.broadcast.to(socket.project_id).emit('project-message');
 
 })
