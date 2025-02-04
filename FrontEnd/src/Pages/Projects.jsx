@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useContext} from 'react';
+import React,{useState,useEffect, useContext,createRef} from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from '../Config/axios'
 import { initializeSocket , recievemessage , sendmessage } from '../Config/socket.js';
@@ -6,6 +6,9 @@ import {UserContext} from '../Context/user.context.jsx'
 
 
 const Projects = () => {
+
+const messageRef = createRef();
+
   const location = useLocation();
 
 const [ispanelopen, setispanelopen] = useState(false)
@@ -25,6 +28,7 @@ useEffect(()=>{
 recievemessage('project-message' , data =>{
 
     console.log(data);
+    appendmessage(data);
   })
 
 
@@ -126,9 +130,40 @@ return newSelectedid;
   
   )
     
+  appendmessageout(message)
     //console.log(message)
     setmessage("")
     }
+
+
+
+
+  
+      function appendmessage(messageObject) {
+        const messageBox = document.querySelector('.message-box');
+        if (messageBox) {
+          const newMessage = document.createElement('div');
+          newMessage.className = `message ${messageObject.sender._id === user._id ? 'bg-blue-500 text-white self-end' : 'bg-white text-black'} p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600 duration-300`;
+          newMessage.innerHTML = `<p>${messageObject.message}</p>`;
+          messageBox.appendChild(newMessage);
+         // messageBox.scrollTop = messageBox.scrollHeight;
+        }
+      }
+
+      function appendmessageout(message) {
+        const messageBox = document.querySelector('.message-box');
+        if (messageBox) {
+          const newMessage = document.createElement('div');
+          newMessage.className = 'message bg-blue-500 text-white self-end p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600 duration-300';
+          newMessage.innerHTML = `<p>${message}</p>`;
+          messageBox.appendChild(newMessage);
+         // messageBox.scrollTop = messageBox.scrollHeight;
+        }
+      }
+    
+
+
+
 
   return (
     <main className='h-screen bg-black w-screen flex border-2 border-white'>
@@ -187,7 +222,7 @@ return (
         </header>
 
         <div className="conversational-area flex flex-col flex-grow">
-          <div className="message-box flex-grow p-4 overflow-y-auto">
+          <div ref={messageRef} className="message-box flex-grow p-4 overflow-y-auto">
           <div className="message bg-white text-black p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600  duration-300">
               <p>Hello, how are you?</p>
             </div>
