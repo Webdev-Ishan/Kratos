@@ -22,7 +22,7 @@ useEffect(()=>{
    const newSocket = initializeSocket(project._id);
 
 
-  const recievedmessage = recievemessage('project-message' , data =>{
+recievemessage('project-message' , data =>{
 
     console.log(data);
   })
