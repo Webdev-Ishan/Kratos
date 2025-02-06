@@ -197,12 +197,6 @@ return newSelectedid;
 
         <div className="conversational-area flex flex-col flex-grow overflow-y-hidden">
           <div ref={messageRef} className="message-box flex-grow p-4 overflow-y-scroll">
-            <div className="message bg-white text-black p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600  duration-300">
-              <p>Hello, how are you?</p>
-            </div>
-            <div className="message bg-blue-500 text-white p-2 rounded mb-2 border-2 border-transparent hover:border-white  duration-300 self-end">
-              <p>I'm good, thank you!</p>
-            </div>
           </div>
 
           <div className="input-field border-2 border-black flex">

@@ -65,8 +65,11 @@ socket.broadcast.to(socket.roomId).emit('project-message',data);
 })
 
 
-  socket.on('event', data => { /* … */ });
-  socket.on('disconnect', () => { /* … */ });
+  socket.on('disconnect', () => { 
+console.log("user disconnected");
+socket.leave(socket.roomId);
+
+   });
 });
 
 
