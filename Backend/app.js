@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import connect from './DB/db.js';
 import UserRoute from './Routes/userRoutes.js';
 import ProjectRoute from './Routes/projectRoutes.js';
+import aiRoutes from './Routes/aiRoutes.js'
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 connect();
@@ -22,5 +23,6 @@ app.get('/', (req, res) => {
 
 app.use('/projects', ProjectRoute);
 app.use('/users', UserRoute);
+app.use('/ai',aiRoutes);
 
 export default app;
