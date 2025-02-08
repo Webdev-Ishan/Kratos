@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import axios from '../Config/axios'
 import { initializeSocket , recievemessage , sendmessage } from '../Config/socket.js';
 import {UserContext} from '../Context/user.context.jsx'
-
+import { marked } from "marked";
 
 const Projects = () => {
 
@@ -139,27 +139,39 @@ return newSelectedid;
 
 
   
-      function appendmessage(messageObject) {
-        const messageBox = document.querySelector('.message-box');
-        if (messageBox) {
+    function appendmessage(messageObject) {
+      const messageBox = document.querySelector('.message-box');
+      if (messageBox) {
           const newMessage = document.createElement('div');
-          newMessage.className = `message ${messageObject.sender._id === user._id ? 'bg-blue-500 text-white self-end' : 'bg-white text-black'} p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600 duration-300`;
-          newMessage.innerHTML = `<p>${messageObject.message}</p>`;
+          newMessage.className = `message ${
+              messageObject.sender._id === user._id
+                  ? 'bg-blue-500 text-white self-end'
+                  : 'bg-white text-black'
+          } p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600 duration-300`;
+  
+          // Convert Markdown to HTML
+          const markdownText = marked.parse(messageObject.message);
+          newMessage.innerHTML = `<p>${markdownText}</p>`;
+  
           messageBox.appendChild(newMessage);
-         // messageBox.scrollTop = messageBox.scrollHeight;
-        }
       }
-
-      function appendmessageout(message) {
-        const messageBox = document.querySelector('.message-box');
-        if (messageBox) {
+  }
+  
+  function appendmessageout(message) {
+      const messageBox = document.querySelector('.message-box');
+      if (messageBox) {
           const newMessage = document.createElement('div');
-          newMessage.className = 'message bg-blue-500 text-white self-end p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600 duration-300';
-          newMessage.innerHTML = `<p>${message}</p>`;
+          newMessage.className =
+              'message bg-blue-500 text-white self-end p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600 duration-300';
+  
+          // Convert Markdown to HTML
+          const markdownText = marked.parse(message);
+          newMessage.innerHTML = `<p>${markdownText}</p>`;
+  
           messageBox.appendChild(newMessage);
-         // messageBox.scrollTop = messageBox.scrollHeight;
-        }
       }
+  }
+  
     
 
 
