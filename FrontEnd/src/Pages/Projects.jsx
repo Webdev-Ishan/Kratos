@@ -146,8 +146,8 @@ return newSelectedid;
           newMessage.className = `message ${
               messageObject.sender._id === user._id
                   ? 'bg-blue-500 text-white self-end'
-                  : 'bg-white text-black'
-          } p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600 duration-300`;
+                  : 'bg-slate-800 text-green-400'
+          } p-2 rounded-lg mb-2 border-2 border-blue-600 duration-300`;
   
           // Convert Markdown to HTML
           const markdownText = marked.parse(messageObject.message);
@@ -162,7 +162,7 @@ return newSelectedid;
       if (messageBox) {
           const newMessage = document.createElement('div');
           newMessage.className =
-              'message bg-blue-500 text-white self-end p-2 rounded mb-2 border-2 border-transparent hover:border-blue-600 duration-300';
+              'message bg-blue-500 text-white self-end p-2 rounded-lg mb-2 border-2 border-blue-600 duration-300';
   
           // Convert Markdown to HTML
           const markdownText = marked.parse(message);

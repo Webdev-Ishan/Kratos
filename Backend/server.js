@@ -63,7 +63,7 @@ socket.on('project-message' ,async data=>{
 const message = data.message;
 
 const isaipresent = message.includes('@ai');
-
+socket.broadcast.to(socket.roomId).emit('project-message',data);
 if(isaipresent){
 
   const prompt = message.replace('@ai', '');
@@ -82,7 +82,7 @@ return;
 
 }
 
-socket.broadcast.to(socket.roomId).emit('project-message',data);
+
 
 })
 
