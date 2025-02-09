@@ -16,7 +16,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
 const [selectedUserId, setSelectedUserId] = useState([]);
 const [ project, setProject ] = useState(location.state.project)
 const [message , setmessage] = useState('')
-
+const [aichat, setaichat] = useState('')
 const [users, setusers] = useState([])
 const {user} = useContext(UserContext);
  
@@ -174,17 +174,19 @@ return newSelectedid;
   
     
 
+  const airesult = (e) => {
+    e.preventDefault();
+    setaichat('');
+  };
 
 
 
   return (
     <main className='h-screen bg-black w-screen flex border-2 border-white'>
-
       <div className={` h-full min-w-65 fixed top-0 bg-blue-600 border-l-1 border-b-2 border-white flex flex-col ${ispanelopen ? 'left-0' : '-left-full'} duration-300`}>
         <header className='w-full h-10 bg-black border-t-1 border-b-1 border-white flex justify-end items-center p-2 px-6 '>
           <i onClick={()=>{setispanelopen(!ispanelopen)}} className="ri-close-large-fill text-white cursor-pointer hover:text-red-600 duration-300"></i>
         </header>
-
         <div className='users flex flex-col gap-2'>
           {Array.isArray(project.users) && project.users.map(user => (
             <div key={user._id} className='user flex items-center gap-2 p-2  duration-300 cursor-pointer'> 
@@ -195,7 +197,6 @@ return newSelectedid;
           ))}
         </div>
       </div>
-
       <section className='left h-full min-w-60 bg-slate-800 border-r-2 border-white flex flex-col'>
         <header className='flex justify-between p-2 px-5 w-full bg-blue-600 border-b-2 border-white'>
           <button className='cursor-pointer p-2' onClick={() => setIsModalOpen(true)}>
@@ -206,11 +207,9 @@ return newSelectedid;
             <i className="ri-group-fill text-white hover:text-black duration-300 cursor-pointer"></i>
           </button>
         </header>
-
         <div className="conversational-area flex flex-col flex-grow overflow-y-hidden">
           <div ref={messageRef} className="message-box flex-grow p-4 overflow-y-scroll">
           </div>
-
           <div className="input-field border-2 border-black flex">
             <input
               className='flex-grow px-4 bg-white border-t-1 border-black focus:outline-none'
@@ -227,6 +226,24 @@ return newSelectedid;
           </div>
         </div>
       </section>
+
+      <section className="right flex-grow h-full flex flex-col items-center justify-evenly text-white">
+        <h1 className="text-5xl mb-4 text-green-500">Ask Your Questions</h1>
+        <div className="w-full max-w-2xl">
+          <form onSubmit={airesult}>
+            <textarea
+              className="w-full h-32 p-4 bg-slate-800 border-2 border-white text-white rounded-lg m-4 focus:outline-none"
+              placeholder="Type your question here..."
+              value={aichat}
+              onChange={(e)=> setaichat(e.target.value)}
+            ></textarea>
+            <button type="submit" className="mt-4 w-full font-semibold p-2 bg-blue-600 border-2 rounded-lg border-transparent hover:border-white text-white duration-300">
+              Submit...
+            </button>
+          </form>
+        </div>
+      </section>
+    
 
       {isModalOpen && (
         <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
