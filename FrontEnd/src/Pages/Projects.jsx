@@ -5,6 +5,7 @@ import { initializeSocket , recievemessage , sendmessage } from '../Config/socke
 import {UserContext} from '../Context/user.context.jsx'
 import { marked } from "marked";
 
+
 const Projects = () => {
 
 const messageRef = createRef();
@@ -19,6 +20,7 @@ const [message , setmessage] = useState('')
 const [aichat, setaichat] = useState('')
 const [users, setusers] = useState([])
 const {user} = useContext(UserContext);
+const [response, setResponse] = useState("");
  
 useEffect(()=>{
 
@@ -174,9 +176,32 @@ return newSelectedid;
   
     
 
-  const airesult = (e) => {
+  const airesult = async (e) => {
     e.preventDefault();
     setaichat('');
+
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=AIzaSyC3zaxSMIuCe6-4elT5opuwDeNZ0_rM8UM`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: textarea }] }],
+          }),
+        }
+      );
+
+      const data = await res.json();
+      setResponse(
+        data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response received."
+      );
+    } catch (error) {
+      console.error("Error fetching response:", error);
+      setResponse("Error fetching response.");
+    }
   };
 
 
@@ -228,7 +253,10 @@ return newSelectedid;
       </section>
 
       <section className="right flex-grow h-full flex flex-col items-center justify-evenly text-white">
-        <h1 className="text-5xl mb-4 text-green-500">Ask Your Questions</h1>
+        <div className='flex justify-evenly gap-5'> <img src="https://img.freepik.com/free-vector/zeus-face-design_1152-60.jpg?t=st=1739157031~exp=1739160631~hmac=c1e7521aa21fef04b051bc7b78057a40f705b7d303c1cffc6b67bacd0cb8a136&w=740" alt="" className='w-12 h-12 rounded-3xl border-2 border-green-500' /> 
+        <h1 style={{ WebkitTextStroke: "1px white" }}  className="text-5xl mb-4 font-bold text-green-600">  Ask Your Questions</h1>
+        </div>
+        
         <div className="w-full max-w-2xl">
           <form onSubmit={airesult}>
             <textarea
